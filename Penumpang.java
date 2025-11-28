@@ -1,66 +1,52 @@
-package Project_Tugas2_PBO; 
+package Project_Tugas2_PBO;
 
-import java.util.Scanner;
+public class Penumpang {
+    // Atribut menggunakan akses private untuk menjaga keamanan data (Encapsulation)
+    private String nama;
+    private int id;
+    private int umur;
+    private boolean hamil;
+    private int saldo;
 
-public class Main {
-    public static void main(String[] args) {
-        // Membuat objek Bus baru
-        Bus busTrans = new Bus();
-        Scanner sc = new Scanner(System.in); // Scanner untuk menerima input
-        int idCounter = 1; // ID otomatis bertambah
+    // Konstruktor untuk inisialisasi objek penumpang dengan nilai awal
+    public Penumpang(String nama, int id, int umur, boolean hamil) {
+        this.nama = nama;
+        this.id = id;
+        this.umur = umur;
+        this.hamil = hamil;
+        // Saldo awal ditetapkan sebesar 10.000 sesuai ketentuan sistem
+        this.saldo = 10000; 
+    }
 
-        // Loop menu utama agar program terus berjalan
-        while (true) {
-            System.out.println("\n===== BUS TRANS KOETARADJA =====");
-            System.out.println("1. Naikkan Penumpang");
-            System.out.println("2. Turunkan Penumpang");
-            System.out.println("3. Lihat Status Penumpang");
-            System.out.println("4. Keluar");
-            System.out.print("Pilihan: ");
-            
-            int pilihan = 0;
-            try {
-                pilihan = sc.nextInt(); // Membaca input angka
-            } catch (Exception e) {
-                System.out.println("Input harus berupa angka.");
-                sc.nextLine(); // Membersihkan buffer input
-                continue;
-            }
-            sc.nextLine(); // Membersihkan karakter baris baru (enter)
+    // Bagian Accessor (Getter) untuk membaca nilai atribut
 
-            if (pilihan == 1) {
-                // Input data penumpang
-                System.out.print("Nama: ");
-                String nama = sc.nextLine();
-                
-                System.out.print("Umur: ");
-                int umur = sc.nextInt();
-                
-                System.out.print("Hamil (y/n): ");
-                String hamilStr = sc.next();
-                boolean hamil = hamilStr.equalsIgnoreCase("y"); // Bernilai true jika input 'y'
+    public String getNama() {
+        return nama;
+    }
 
-                // Membuat objek penumpang dan memasukkannya ke bus
-                Penumpang p = new Penumpang(nama, idCounter++, umur, hamil);
-                busTrans.naikkanPenumpang(p);
+    public int getId() {
+        return id;
+    }
 
-            } else if (pilihan == 2) {
-                // Input nama penumpang yang akan turun
-                System.out.print("Nama penumpang yang turun: ");
-                String nama = sc.nextLine();
-                busTrans.turunkanPenumpang(nama);
+    public int getUmur() {
+        return umur;
+    }
 
-            } else if (pilihan == 3) {
-                // Menampilkan laporan
-                System.out.println(busTrans.toString());
+    public boolean getHamil() {
+        return hamil;
+    }
 
-            } else if (pilihan == 4) {
-                System.out.println("Terima kasih.");
-                break; // Menghentikan program
-            } else {
-                System.out.println("Pilihan tidak valid.");
-            }
-        }
-        sc.close();
+    public int getSaldo() {
+        return saldo;
+    }
+
+    // Metode untuk melakukan penambahan saldo (Top-up)
+    public void tambahSaldo(int nominal) {
+        this.saldo += nominal;
+    }
+
+    // Metode untuk pembayaran ongkos, saldo akan dikurangi
+    public void kurangiSaldo(int biaya) {
+        this.saldo -= biaya;
     }
 }
