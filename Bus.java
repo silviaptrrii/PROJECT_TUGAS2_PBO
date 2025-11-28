@@ -49,26 +49,32 @@ public class Bus {
         // 3. Pengecekan status prioritas (Lansia > 60, Anak < 10, atau Hamil)
         boolean statusPrioritas = p.getUmur() > 60 || p.getUmur() < 10 || p.getHamil();
         boolean statusNaik = false;
+        String jenisKursi = "";
 
         if (statusPrioritas) {
             // Jika Prioritas: Utamakan kursi prioritas -> kursi biasa -> berdiri
             if (listPenumpangPrioritas.size() < MAX_PRIORITAS) {
                 listPenumpangPrioritas.add(p);
+                jenisKursi = "KURSI PRIORITAS";
                 statusNaik = true;
             } else if (listPenumpangBiasa.size() < MAX_BIASA) {
                 listPenumpangBiasa.add(p);
+                jenisKursi = "KURSI BIASA (Prioritas Penuh)";
                 statusNaik = true;
             } else if (listPenumpangBerdiri.size() < MAX_BERDIRI) {
                 listPenumpangBerdiri.add(p);
+                jenisKursi = "AREA BERDIRI";
                 statusNaik = true;
             }
         } else {
             // Jika Penumpang Biasa: Hanya boleh kursi biasa atau berdiri
             if (listPenumpangBiasa.size() < MAX_BIASA) {
                 listPenumpangBiasa.add(p);
+                jenisKursi = "KURSI BIASA";
                 statusNaik = true;
             } else if (listPenumpangBerdiri.size() < MAX_BERDIRI) {
                 listPenumpangBerdiri.add(p);
+                jenisKursi = "AREA BERDIRI";
                 statusNaik = true;
             }
         }
@@ -77,7 +83,7 @@ public class Bus {
         if (statusNaik) {
             p.kurangiSaldo(ONGKOS_BUS);
             pendapatanHarian += ONGKOS_BUS;
-            System.out.println("Berhasil: Penumpang atas nama " + p.getNama() + " telah naik.");
+            System.out.println("Berhasil: " + p.getNama() + " masuk ke " + jenisKursi + ".");
             return true;
         } else {
             System.out.println("Gagal: Tidak tersedia kursi yang sesuai untuk penumpang ini.");
@@ -85,3 +91,69 @@ public class Bus {
         }
     }
 
+    // Logika menurunkan penumpang berdasarkan pencarian nama
+    public boolean turunkanPenumpang(String namaTarget) {
+        for (int i = 0; i < listPenumpangBiasa.size(); i++) {
+            if (listPenumpangBiasa.get(i).getNama().equalsIgnoreCase(namaTarget)) {
+                listPenumpangBiasa.remove(i);
+                System.out.println("Sukses: " + namaTarget + " turun dari Kursi Biasa.");
+                return true;
+            }
+        }
+        for (int i = 0; i < listPenumpangPrioritas.size(); i++) {
+            if (listPenumpangPrioritas.get(i).getNama().equalsIgnoreCase(namaTarget)) {
+                listPenumpangPrioritas.remove(i);
+                System.out.println("Sukses: " + namaTarget + " turun dari Kursi Prioritas.");
+                return true;
+            }
+        }
+        for (int i = 0; i < listPenumpangBerdiri.size(); i++) {
+            if (listPenumpangBerdiri.get(i).getNama().equalsIgnoreCase(namaTarget)) {
+                listPenumpangBerdiri.remove(i);
+                System.out.println("Sukses: " + namaTarget + " turun dari Area Berdiri.");
+                return true;
+            }
+        }
+        System.out.println("Peringatan: Data penumpang dengan nama " + namaTarget + " tidak ditemukan.");
+        return false;
+    }
+
+    // --- INI METHOD TOP UP YANG AKU TAMBAHKAN ---
+    public void topUpSaldoPenumpang(String nama, int nominal) {
+        if (cekDanTopUp(listPenumpangBiasa, nama, nominal)) return;
+        if (cekDanTopUp(listPenumpangPrioritas, nama, nominal)) return;
+        if (cekDanTopUp(listPenumpangBerdiri, nama, nominal)) return;
+        
+        System.out.println("Gagal: Penumpang bernama " + nama + " tidak ditemukan di dalam bus.");
+    }
+
+    private boolean cekDanTopUp(ArrayList<Penumpang> list, String nama, int nominal) {
+        for (Penumpang p : list) {
+            if (p.getNama().equalsIgnoreCase(nama)) {
+                p.tambahSaldo(nominal);
+                System.out.println("Sukses: Saldo " + nama + " bertambah Rp " + nominal + ". Total: " + p.getSaldo());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Menampilkan laporan status bus dalam bentuk String
+    public String toString() {
+        String laporan = "\n=== LAPORAN STATUS BUS ===\n";
+        
+        laporan += ">> Kursi Biasa (" + getJumlahBiasa() + "/" + MAX_BIASA + "):\n";
+        if (listPenumpangBiasa.isEmpty()) laporan += "   - (Tidak ada penumpang)\n";
+        else for (Penumpang p : listPenumpangBiasa) laporan += "   - " + p.getNama() + " (Saldo: " + p.getSaldo() + ")\n";
+
+        laporan += "\n>> Kursi Prioritas (" + getJumlahPrioritas() + "/" + MAX_PRIORITAS + "):\n";
+        if (listPenumpangPrioritas.isEmpty()) laporan += "   - (Tidak ada penumpang)\n";
+        else for (Penumpang p : listPenumpangPrioritas) laporan += "   - " + p.getNama() + " (Saldo: " + p.getSaldo() + ")\n";
+
+        laporan += "\n>> Area Berdiri (" + getJumlahBerdiri() + "/" + MAX_BERDIRI + "):\n";
+        if (listPenumpangBerdiri.isEmpty()) laporan += "   - (Tidak ada penumpang)\n";
+        else for (Penumpang p : listPenumpangBerdiri) laporan += "   - " + p.getNama() + " (Saldo: " + p.getSaldo() + ")\n";
+        
+        return laporan;
+    }
+}
