@@ -17,7 +17,7 @@ public class Main {
             System.out.println("[3] Tampilkan Data Penumpang");
             System.out.println("[4] Cek Ketersediaan Kursi");
             System.out.println("[5] Laporan Total Pendapatan");
-            System.out.println("[6] Top Up Saldo Penumpang"); // <--- INI TAMBAHAN MENU 6
+            System.out.println("[6] Top Up Saldo Penumpang");
             System.out.println("[0] Keluar dari Sistem");
             System.out.println("--------------------------------------");
             System.out.print("Masukkan pilihan menu (0-6): ");
@@ -86,7 +86,7 @@ public class Main {
                 busSistem.topUpSaldoPenumpang(namaTopUp, nominal);
 
             } else if (pilihanMenu == 0) {
-                System.out.println("Sistem dihentikan. Terima kasih!!.");
+                System.out.println("Sistem dihentikan. Terima kasih!!!.");
                 break;
             } else {
                 System.out.println("Pilihan tidak valid, silakan coba kembali.");
