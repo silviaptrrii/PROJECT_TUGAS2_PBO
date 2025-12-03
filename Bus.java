@@ -118,7 +118,6 @@ public class Bus {
         return false;
     }
 
-    // --- INI METHOD TOP UP YANG AKU TAMBAHKAN ---
     public void topUpSaldoPenumpang(String nama, int nominal) {
         if (cekDanTopUp(listPenumpangBiasa, nama, nominal)) return;
         if (cekDanTopUp(listPenumpangPrioritas, nama, nominal)) return;
