@@ -78,7 +78,7 @@ public class Main {
                 System.out.println("\n Total Pendapatan Bus: Rp " + busSistem.getTotalPendapatan());
 
             } else if (pilihanMenu == 6) {
-                // --- INI LOGIKA TOP UP (AKU TAMBAHIN DI SINI) ---
+                // LOGIKA TOP UP
                 System.out.print("Nama Penumpang: ");
                 String namaTopUp = inputScanner.nextLine();
                 System.out.print("Nominal Top Up (Rp): ");
